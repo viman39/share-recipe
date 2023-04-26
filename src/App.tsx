@@ -1,12 +1,16 @@
-import React from "react";
+import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
-import Body from "./components/Body/Body";
+import Homepage from "./pages/Homepage/Homepage";
+import AddReceipt from "./pages/AddReceipt/AddReceipt";
 
 function App() {
   return (
     <>
       <Header />
-      <Body />
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/receipt/create" element={<AddReceipt />} />
+      </Routes>
     </>
   );
 }

@@ -1,17 +1,18 @@
-import { AppBar, Typography, Button, Toolbar, Link } from "@mui/material";
+import { AppBar, Typography, Button, Toolbar } from "@mui/material";
+import { Link } from "react-router-dom";
 import HomeIcon from "../Icons/HomeIcon";
 
 const Header = () => (
-  <AppBar>
+  <AppBar color="transparent" position="sticky">
     <Toolbar>
-      <Button color="inherit" sx={{ flexGrow: 0.1 }}>
-        <HomeIcon />
-        <Typography variant="h5" sx={{ flexGrow: 0.3 }}>
-          RECIPES
-        </Typography>
-      </Button>
+      <Link to="/">
+        <Button color="inherit">
+          <HomeIcon />
+          <Typography variant="h5">RECIPES</Typography>
+        </Button>
+      </Link>
+      <Link to="receipt/create">Add Receipt</Link>
     </Toolbar>
-    <Link underline="hover"></Link>
   </AppBar>
 );
 
