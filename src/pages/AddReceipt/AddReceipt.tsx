@@ -1,36 +1,26 @@
-import {
-  TextField,
-  FormControl,
-  InputLabel,
-  Input,
-  FormHelperText,
-} from "@mui/material";
+import { TextField } from "@mui/material";
 import { useState } from "react";
+import { Receipt } from "../Receipt/receipt.types";
 
-interface Ingredient {
-  id: number;
-  text: string;
+interface AddReceiptProps {
+  addReceipt: (receipt: Receipt) => void;
 }
 
-const AddReceipt = () => {
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+const AddReceipt: React.FC<AddReceiptProps> = ({ addReceipt }) => {
+  const [ingredients, setIngredients] = useState<string[]>([]);
   const [ingredient, setIngredient] = useState("");
-  const [receiptName, setReceiptName] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
   const addIngredient = () => {
     if (ingredient != "") {
-      setIngredients((prev) => [
-        ...prev,
-        { id: prev.length, text: ingredient },
-      ]);
-
+      setIngredients((prev) => [...prev, ingredient]);
       setIngredient("");
     }
   };
 
   const createReceipt = () => {
-    console.log({ receiptName, ingredients, description });
+    addReceipt({ ingredients, title, description });
   };
 
   return (
@@ -40,14 +30,14 @@ const AddReceipt = () => {
         label="Receipt Name"
         variant="outlined"
         onChange={(e) => {
-          setReceiptName(e.target.value);
+          setTitle(e.target.value);
         }}
       />
       <div>
         <span>Ingredients</span>
         <ul>
-          {ingredients.map(({ id, text }) => (
-            <li key={id}>{text}</li>
+          {ingredients.map((ingredient, index) => (
+            <li key={index}>{ingredient}</li>
           ))}
         </ul>
         <TextField
