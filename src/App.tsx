@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import Header from "./components/Header/Header";
+import Layout from "./components/Layout/Layout";
 import Homepage from "./pages/Homepage/Homepage";
 import AddReceipt from "./pages/AddReceipt/AddReceipt";
 import { useState } from "react";
@@ -7,10 +7,9 @@ import { Receipt } from "./pages/Receipt/receipt.types";
 
 function App() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
-  console.log(receipts);
+
   return (
-    <>
-      <Header />
+    <Layout>
       <Routes>
         <Route path="/" element={<Homepage receipts={receipts} />} />
         <Route
@@ -24,7 +23,7 @@ function App() {
           }
         />
       </Routes>
-    </>
+    </Layout>
   );
 }
 
