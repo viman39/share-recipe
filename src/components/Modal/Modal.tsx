@@ -1,4 +1,4 @@
-import { AppBar, Typography, Button, Modal, Box } from "@mui/material";
+import { Typography, Button, Modal, Box } from "@mui/material";
 import { modalClass } from "./modal.styles";
 
 interface ModalWrapperProps {
