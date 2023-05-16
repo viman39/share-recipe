@@ -1,12 +1,9 @@
 import { TextField } from "@mui/material";
 import { useState } from "react";
 import { Receipt } from "../Receipt/receipt.types";
+import { createDB } from "../../utils/firebase";
 
-interface AddReceiptProps {
-  addReceipt: (receipt: Receipt) => void;
-}
-
-const AddReceipt: React.FC<AddReceiptProps> = ({ addReceipt }) => {
+const AddReceipt: React.FC = () => {
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [ingredient, setIngredient] = useState("");
   const [title, setTitle] = useState("");
@@ -19,8 +16,8 @@ const AddReceipt: React.FC<AddReceiptProps> = ({ addReceipt }) => {
     }
   };
 
-  const createReceipt = () => {
-    addReceipt({ ingredients, title, description });
+  const createReceipt = async () => {
+    createDB("receipts", { ingredients, title, description });
   };
 
   return (
@@ -34,7 +31,7 @@ const AddReceipt: React.FC<AddReceiptProps> = ({ addReceipt }) => {
         }}
       />
       <div>
-        <span>Ingredients</span>
+        <span>Ingrediente</span>
         <ul>
           {ingredients.map((ingredient, index) => (
             <li key={index}>{ingredient}</li>
@@ -49,7 +46,7 @@ const AddReceipt: React.FC<AddReceiptProps> = ({ addReceipt }) => {
             setIngredient(e.target.value);
           }}
         />
-        <button onClick={addIngredient}>Add</button>
+        <button onClick={addIngredient}>adauga</button>
       </div>
       <TextField
         id="outlined-multiline-static"
@@ -60,7 +57,7 @@ const AddReceipt: React.FC<AddReceiptProps> = ({ addReceipt }) => {
           setDescription(e.target.value);
         }}
       />
-      <button onClick={createReceipt}>Create</button>
+      <button onClick={createReceipt}>Creaza</button>
     </>
   );
 };
