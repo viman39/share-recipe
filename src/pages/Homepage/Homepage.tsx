@@ -1,16 +1,13 @@
-import useGetDocs from "../../utils/hooks/useGetDocs";
+import { useFetchCollection } from "../../utils/hooks/useFirestore";
 import { Receipt } from "../Receipt/receipt.types";
 
 const Homepage: React.FC = () => {
-  const receipts: any = [];
-
-  const receipt = useGetDocs("receipts");
+  const { data: receipts } = useFetchCollection("receipts");
 
   return (
     <>
-      {receipt.title}
       {receipts.map((receipt: Receipt, index: number) => (
-        <div key={index}>{receipt.title}</div>
+        <div key={index}>{receipt?.title}</div>
       ))}
     </>
   );

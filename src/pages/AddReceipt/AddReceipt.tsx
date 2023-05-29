@@ -1,13 +1,13 @@
 import { TextField } from "@mui/material";
 import { useState } from "react";
-import { Receipt } from "../Receipt/receipt.types";
-import { createDB } from "../../utils/firebase";
+import { useAddDocument } from "../../utils/hooks/useFirestore";
 
 const AddReceipt: React.FC = () => {
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [ingredient, setIngredient] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const { addDocument } = useAddDocument("receipts");
 
   const addIngredient = () => {
     if (ingredient != "") {
@@ -17,7 +17,7 @@ const AddReceipt: React.FC = () => {
   };
 
   const createReceipt = async () => {
-    createDB("receipts", { ingredients, title, description });
+    addDocument({ ingredients, title, description });
   };
 
   return (
