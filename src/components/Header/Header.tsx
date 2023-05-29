@@ -2,11 +2,12 @@ import { useState } from "react";
 import { AppBar, Typography, Button, Toolbar } from "@mui/material";
 import { Link } from "../Link";
 import HomeIcon from "../Icons/HomeIcon";
-import { Modal } from "../Modal/Modal";
+import ModalLogin from "./ModalLogin";
+import useAuth from "../../utils/hooks/useAuth";
 
 const Header = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <>
@@ -20,22 +21,18 @@ const Header = () => {
           <Button color="inherit">
             <Link to="/receipt/create">Add Receipt</Link>
           </Button>
-          {isLogin ? (
-            <Button color="inherit" onClick={() => setIsLogin(false)}>
-              Logout
+          {user !== null ? (
+            <Button color="inherit" onClick={() => logout()}>
+              {`Logout ${user.email}`}
             </Button>
           ) : (
             <>
               <Button color="inherit" onClick={() => setModalIsOpen(true)}>
                 Login
               </Button>
-              <Modal
+              <ModalLogin
                 modalIsOpen={modalIsOpen}
-                onConfirmHandler={() => {
-                  setIsLogin(true);
-                  setModalIsOpen(false);
-                }}
-                onCloseHandler={() => setModalIsOpen(false)}
+                setModalIsOpen={setModalIsOpen}
               />
             </>
           )}
