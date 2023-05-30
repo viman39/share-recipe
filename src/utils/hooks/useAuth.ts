@@ -10,16 +10,19 @@ import {
 
 const useAuth = () => {
   const [user, setUser] = useState<null | User>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
+      setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
 
   const login = async (email: string, password: string) => {
+    setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
@@ -28,6 +31,7 @@ const useAuth = () => {
   };
 
   const signup = async (email: string, password: string) => {
+    setLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
     } catch (error) {
@@ -36,6 +40,7 @@ const useAuth = () => {
   };
 
   const logout = async () => {
+    setLoading(true);
     try {
       await signOut(auth);
     } catch (error) {
@@ -43,7 +48,7 @@ const useAuth = () => {
     }
   };
 
-  return { user, login, signup, logout };
+  return { user, loading, login, signup, logout };
 };
 
 export default useAuth;

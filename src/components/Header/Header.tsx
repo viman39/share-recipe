@@ -18,13 +18,15 @@ const Header = () => {
               <HomeIcon /> RECEIPT
             </Link>
           </Typography>
-          <Button color="inherit">
-            <Link to="/receipt/create">Add Receipt</Link>
-          </Button>
           {user !== null ? (
-            <Button color="inherit" onClick={() => logout()}>
-              {`Logout ${user.email}`}
-            </Button>
+            <>
+              <Button color="inherit">
+                <Link to="/receipt/create">Add Receipt</Link>
+              </Button>
+              <Button color="inherit" onClick={() => logout()}>
+                {`Logout ${user.email}`}
+              </Button>
+            </>
           ) : (
             <>
               <Button color="inherit" onClick={() => setModalIsOpen(true)}>

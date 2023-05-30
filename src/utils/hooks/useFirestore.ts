@@ -18,10 +18,9 @@ export const useFetchCollection = (
 ) => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+  const { field, operator, value } = queryOptions;
 
   useEffect(() => {
-    const { field, operator, value } = queryOptions;
-
     const collectionRef =
       field && operator && value
         ? query(collection(db, collectionName), where(field, operator, value))
@@ -37,7 +36,7 @@ export const useFetchCollection = (
     });
 
     return () => unsubscribe();
-  }, [collectionName]);
+  }, [collectionName, field, operator, value]);
 
   return { data, loading };
 };
@@ -69,15 +68,18 @@ export const useFetchDocument = (
 };
 
 export const useAddDocument = (collectionName: string) => {
+  const [loading, setLoading] = useState(false);
+
   const addDocument = async (data: any) => {
     try {
       await addDoc(collection(db, collectionName), data);
+      setLoading(false);
     } catch (error) {
       console.log("Add document error:", error);
     }
   };
 
-  return { addDocument };
+  return { addDocument, setLoading, loading };
 };
 
 export const useUpdateDocument = (

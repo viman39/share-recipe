@@ -1,13 +1,15 @@
 import { TextField } from "@mui/material";
 import { useState } from "react";
 import { useAddDocument } from "../../utils/hooks/useFirestore";
+import useAuth from "../../utils/hooks/useAuth";
 
 const AddReceipt: React.FC = () => {
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [ingredient, setIngredient] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const { addDocument } = useAddDocument("receipts");
+  const { addDocument, setLoading, loading } = useAddDocument("receipts");
+  const { user } = useAuth();
 
   const addIngredient = () => {
     if (ingredient != "") {
@@ -17,7 +19,8 @@ const AddReceipt: React.FC = () => {
   };
 
   const createReceipt = async () => {
-    addDocument({ ingredients, title, description });
+    setLoading(true);
+    addDocument({ ingredients, title, description, userId: user?.uid });
   };
 
   return (
@@ -57,7 +60,8 @@ const AddReceipt: React.FC = () => {
           setDescription(e.target.value);
         }}
       />
-      <button onClick={createReceipt}>Creaza</button>
+      {!loading && <button onClick={createReceipt}>Creaza</button>}
+      {loading && <button>Loading</button>}
     </>
   );
 };
