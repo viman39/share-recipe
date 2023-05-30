@@ -6,25 +6,35 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import { QueryOptions, Collection } from "../firebase.types";
 
-export const useFetchCollection = (collectionName: string) => {
+export const useFetchCollection = (
+  collectionName: Collection,
+  queryOptions: Partial<QueryOptions> = {}
+) => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(db, collectionName),
-      (snapshot) => {
-        const fetchedData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setData(fetchedData);
-        setLoading(false);
-      }
-    );
+    const { field, operator, value } = queryOptions;
+
+    const collectionRef =
+      field && operator && value
+        ? query(collection(db, collectionName), where(field, operator, value))
+        : collection(db, collectionName);
+
+    const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
+      const fetchedData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setData(fetchedData);
+      setLoading(false);
+    });
 
     return () => unsubscribe();
   }, [collectionName]);
@@ -32,9 +42,8 @@ export const useFetchCollection = (collectionName: string) => {
   return { data, loading };
 };
 
-// Hook for fetching a single document by ID
 export const useFetchDocument = (
-  collectionName: string,
+  collectionName: Collection,
   documentId: string
 ) => {
   const [document, setDocument] = useState(null);
@@ -59,7 +68,6 @@ export const useFetchDocument = (
   return { document, loading };
 };
 
-// Hook for adding a new document
 export const useAddDocument = (collectionName: string) => {
   const addDocument = async (data: any) => {
     try {
@@ -72,7 +80,6 @@ export const useAddDocument = (collectionName: string) => {
   return { addDocument };
 };
 
-// Hook for updating a document
 export const useUpdateDocument = (
   collectionName: string,
   documentId: string
@@ -88,7 +95,6 @@ export const useUpdateDocument = (
   return { updateDocument };
 };
 
-// Hook for deleting a document
 export const useDeleteDocument = (
   collectionName: string,
   documentId: string
