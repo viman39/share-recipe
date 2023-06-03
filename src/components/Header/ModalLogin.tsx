@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Button } from "@mui/material";
 import useAuth from "../../utils/hooks/useAuth";
 import { Modal } from "../Modal/Modal";
-import { TextField, Grid, Divider } from "@mui/material";
+import { TextField, Grid, Button } from "@mui/material";
 
 interface ModalLoginProps {
   modalIsOpen: boolean;
