@@ -1,13 +1,27 @@
 import { useState } from "react";
-import { AppBar, Typography, Button, Toolbar } from "@mui/material";
+import {
+  AppBar,
+  Typography,
+  Toolbar,
+  Drawer,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
 import { Link } from "../Link";
 import HomeIcon from "../Icons/HomeIcon";
 import ModalLogin from "./ModalLogin";
 import useAuth from "../../utils/hooks/useAuth";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const Header = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { user, logout } = useAuth();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
     <>
@@ -18,24 +32,73 @@ const Header = () => {
               <HomeIcon /> RECEIPT
             </Link>
           </Typography>
-          {user !== null ? (
+          {isMobile && (
             <>
-              <Button color="inherit">
-                <Link to="/receipt/create">Add Receipt</Link>
-              </Button>
-              <Button color="inherit" onClick={() => logout()}>
-                {`Logout ${user.email}`}
-              </Button>
+              <IconButton
+                size="large"
+                edge="end"
+                color="inherit"
+                aria-label="menu"
+                onClick={() => setDrawerOpen(true)}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Drawer
+                anchor="right"
+                open={drawerOpen}
+                onClose={() => setDrawerOpen(false)}
+              >
+                <List>
+                  {user !== null ? (
+                    <>
+                      <ListItem>
+                        <ListItemText
+                          primary={
+                            <Link to="/receipt/create">Add Receipt</Link>
+                          }
+                        />
+                      </ListItem>
+                      <ListItem onClick={() => logout()}>
+                        <ListItemText primary={`Logout ${user.email}`} />
+                      </ListItem>
+                    </>
+                  ) : (
+                    <>
+                      <ListItem onClick={() => setModalIsOpen(true)}>
+                        <ListItemText primary="Login" />
+                      </ListItem>
+                      <ModalLogin
+                        modalIsOpen={modalIsOpen}
+                        setModalIsOpen={setModalIsOpen}
+                      />
+                    </>
+                  )}
+                </List>
+              </Drawer>
             </>
-          ) : (
+          )}
+          {!isMobile && (
             <>
-              <Button color="inherit" onClick={() => setModalIsOpen(true)}>
-                Login
-              </Button>
-              <ModalLogin
-                modalIsOpen={modalIsOpen}
-                setModalIsOpen={setModalIsOpen}
-              />
+              {user !== null ? (
+                <>
+                  <Button color="inherit">
+                    <Link to="/receipt/create">Add Receipt</Link>
+                  </Button>
+                  <Button color="inherit" onClick={() => logout()}>
+                    {`Logout ${user.email}`}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button color="inherit" onClick={() => setModalIsOpen(true)}>
+                    Login
+                  </Button>
+                  <ModalLogin
+                    modalIsOpen={modalIsOpen}
+                    setModalIsOpen={setModalIsOpen}
+                  />
+                </>
+              )}
             </>
           )}
         </Toolbar>
