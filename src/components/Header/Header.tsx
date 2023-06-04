@@ -12,10 +12,10 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Link } from "../Link";
-import HomeIcon from "../Icons/HomeIcon";
 import ModalLogin from "./ModalLogin";
 import useAuth from "../../utils/hooks/useAuth";
 import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
 
 const Header = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -29,7 +29,7 @@ const Header = () => {
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/">
-              <HomeIcon /> RECEIPT
+              <HomeIcon viewBox="0 -5 24 24" /> RECEIPT
             </Link>
           </Typography>
           {isMobile && (
